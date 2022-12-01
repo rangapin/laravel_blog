@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -18,6 +19,15 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    const DEFAULT = 1;
+    const MODERATOR = 2;
+    const WRITER = 3;
+    const ADMIN = 4;
+
+    const TABLE = 'users';
+
+    protected $table = self::TABLE;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,6 +37,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type',
     ];
 
     /**
@@ -58,4 +69,30 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+public function id(): int {
+        return $this->id;
+    }
+public function name(): string {
+        return $this->name;
+    }
+public function emailAddress(): string {
+        return $this->email;
+    }
+public function type(): int {
+    return (int) $this->type;
+}
+public function isModerator(): bool {
+    return $this->type() === self::MODERATOR;
+}
+public function isWriter(): bool {
+    return $this->type() === self::WRITER;
+
+}
+public function isAdmin(): bool {
+    return $this->type() === self::ADMIN;
+}
+
+public function profile(): HasOne {
+    return $this->hasOne(Profile::class);
+}
 }
