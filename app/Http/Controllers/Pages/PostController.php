@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Pages;
 
-use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        return view('pages.posts.index');
+        return $this->middleware(['auth', 'verified'])->only(['show']);
     }
 
-    public function show()
+    public function show(Post $post)
     {
-        return view('pages.posts.show');
+        return view('pages.posts.show', compact('post'));
     }
 }

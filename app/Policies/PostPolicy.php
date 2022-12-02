@@ -18,7 +18,7 @@ class PostPolicy
      */
     public function viewAny(User $user)
     {
-        return true;
+        return $user->isAdmin() || $user->isSuperAdmin();
     }
 
     /**
@@ -30,7 +30,6 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        return true;
     }
 
     /**
@@ -41,7 +40,7 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        return $user->isAdmin() || $user->isWriter();
+        return $user->isAdmin() || $user->isSuperAdmin() || $user->isWriter();
     }
 
     /**
@@ -53,7 +52,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $post->isAuthoredBy($user) || $user->isAdmin();
+        return $user->isAdmin() || $user->isSuperAdmin() || $post->isAuthoredBy($user);
     }
 
     /**
@@ -65,7 +64,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        //
+        return $user->isAdmin() || $user->isSuperAdmin() || $post->isAuthoredBy($user);
     }
 
     /**
@@ -77,7 +76,7 @@ class PostPolicy
      */
     public function restore(User $user, Post $post)
     {
-        //
+        return $user->isAdmin() || $user->isSuperAdmin();
     }
 
     /**
@@ -89,6 +88,6 @@ class PostPolicy
      */
     public function forceDelete(User $user, Post $post)
     {
-        //
+        return $user->isAdmin() || $user->isSuperAdmin();
     }
 }
