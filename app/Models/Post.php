@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Casts\TitleCast;
+use App\Traits\HasAuthor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
     use HasFactory;
+    use HasAuthor;
 
     const TABLE = 'posts';
 
@@ -20,6 +22,7 @@ class Post extends Model
         'slug',
         'cover_image',
         'published_at',
+        'author_id',
         'type',
         'photo_credit_text',
         'photo_credit_link',
